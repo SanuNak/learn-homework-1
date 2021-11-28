@@ -45,23 +45,22 @@ def talk_to_me(update, context):
     update.message.reply_text(user_text) # ответ бота
 
 def ephem_answer(update, context):
-    text = 'Определяем расположение планеты'
-    update.message.reply_text(text)
 
-    if len(update.message.text.split())==1:
-        text = 'Ничего не введено, введите имя планеты латинницой'
-        update.message.reply_text(text)
+    user_text = update.message.text
+    update.message.reply_text("Определяем расположение планеты")
 
-    elif len(update.message.text.split())==2:
-        try:
-            user_planet = update.message.text.split()[1].lower().strip().capitalize()
-            ephem_answer = eval(f'ephem.{user_planet}("2000/01/01")')
-            constellation = ephem.constellation(ephem_answer)
-            update.message.reply_text(constellation) # ответ бота
-        except AttributeError:
-            bad_answer = 'Эту планет еще не нашли, напишите другую'
-            update.message.reply_text(bad_answer)
+    if len(user_text.split(" ")) == 1:
+        update.message.reply_text("Ничего не введено, введите имя планеты")
 
+    elif len(update.message.text.split(" ")) > 1:
+            user_planet = user_text.split()[1].lower().strip(" ").capitalize()
+            ephem_answer = getattr(ephem, user_planet, "Эту планету еще не придумали")
+            if isinstance(ephem_answer, type):
+                ephem_answer = ephem_answer('2021/10/1')
+                constellation = ephem.constellation(ephem_answer)
+                update.message.reply_text(constellation) # ответ бота
+            else:
+                update.message.reply_text(ephem_answer)
 
 
 def main():

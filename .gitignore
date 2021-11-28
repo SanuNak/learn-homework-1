@@ -2,7 +2,6 @@
 __pycache__/
 *.py[cod]
 *$py.class
-settings.py
 .idea/
 
 
@@ -124,3 +123,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Personal info
+settings.py
+/setting.py
